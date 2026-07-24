@@ -1,22 +1,31 @@
 #!/usr/bin/env python3
-"""Generic kernel flavor: a full-featured distro kernel.
+"""IncusOS kernel flavor: a hypervisor/container host kernel.
 
 This is the *policy* half of the generator -- what to switch on and why. All
 the machinery it calls lives in genconfig.py; this file contains no Kconfig
 tree-walking logic of its own, only decisions.
 
-Its target is byte-parity with misc/zabbly-config (Ubuntu-flavored, x86_64,
-general-purpose desktop/server), which is what makes it a usable test of the
-genconfig.py machinery: a diff of zero proves the walker, the deny-list and
-the environment setup all behave like the real C kconfig. A large block near
-the end is therefore VALIDATION-ONLY -- sound, graphics, media, wireless
-laptop hardware -- and is explicitly marked as such.
+STATUS: this is currently a verbatim copy of the generic flavor, taken as a
+starting point so that divergence from it is visible commit by commit rather
+than arriving as one unreviewable drop. Nothing here has been trimmed yet.
+
+Where it is going: IncusOS runs VMs and containers on x86_64 server hardware.
+Everything the generic flavor carries for desktop and laptop use -- sound,
+graphics, media capture, wireless, consumer interconnects -- is exactly what
+this flavor exists to leave out. The block near the end that the generic
+flavor marks VALIDATION-ONLY is the obvious first thing to go.
+
+It is still compared against misc/zabbly-config, because that is the only
+reference config in the tree and a diff is more informative than no diff. But
+unlike the generic flavor, a *large* diff is the goal here, not a defect:
+byte-parity with a general-purpose distro kernel would mean this flavor had
+failed at its job. Read its diff as a list of what has been dropped so far.
 
 The data half lives in config_slices/ next to this file, loaded near the end.
-Anything that is genuinely per-symbol distro policy (no family, no gate, no
-prefix) belongs there rather than here.
+Anything that is genuinely per-symbol policy (no family, no gate, no prefix)
+belongs there rather than here.
 
-Run with ./genconfig.sh (or ./genconfig.sh generic).
+Run with ./genconfig.sh incus-os.
 """
 import os
 import sys
